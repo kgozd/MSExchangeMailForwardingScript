@@ -24,10 +24,10 @@ function EnablingForwarding {
         catch{Write-Host ("Distribution group already created")}
         
         Try{Add-DistributionGroupMember -Identity $DistroGroup -Members $MailF2}
-        catch{Write-Host("Użytkownik $MailF2 couldn't be added to $DistroGroup")}
+        catch{Write-Host("User $MailF2 couldn't be added to $DistroGroup")}
         
         Try{Add-DistributionGroupMember -Identity $DistroGroup -Members $MailF3}
-        catch{Write-Host("Użytkownik $MailF3 couldn't be added to $DistroGroup")}
+        catch{Write-Host("User $MailF3 couldn't be added to $DistroGroup")}
         
         Try{Set-Mailbox -Identity $MailToForward -ForwardingSMTPAddress $DistroGroup -DeliverToMailboxAndForward $true -force}
         catch{Write-Host("Mail forwarding already enabled")}
