@@ -13,7 +13,7 @@ function LogToExO {
 
 function CreatingDistroGroupName {
     $script:MailTrim = $MailToForward.split('@')[0] 
-    $script:DistroGroup =  $MailTrim + '_forwarding@' + '<your_mail_domain>' + '.onmicrosoft.com'
+    $script:DistroGroup =  $MailTrim + '_forwarding' 
 }
 
 function EnablingForwarding {
@@ -23,13 +23,13 @@ function EnablingForwarding {
         Try{New-DistributionGroup $DistroGroup -Members $MailF1}
         catch{Write-Host ("Distribution group already created")}
         
-        Try{Add-DistributionGroupMember -Identity $DistroGroup -Members $MailF2}
+        Try{Add-DistributionGroupMember -Identity $DistroGroup -Member $MailF2}
         catch{Write-Host("User $MailF2 couldn't be added to $DistroGroup")}
         
-        Try{Add-DistributionGroupMember -Identity $DistroGroup -Members $MailF3}
+        Try{Add-DistributionGroupMember -Identity $DistroGroup -Member $MailF3}
         catch{Write-Host("User $MailF3 couldn't be added to $DistroGroup")}
-        
-        Try{Set-Mailbox -Identity $MailToForward -ForwardingSMTPAddress $DistroGroup -DeliverToMailboxAndForward $true -force}
+                                                                                            
+        Try{Set-Mailbox -Identity $MailToForward -ForwardingSMTPAddress "$DistroGroup@<your_domain>.onmicrosoft.com" -DeliverToMailboxAndForward $true -force}
         catch{Write-Host("Mail forwarding already enabled")}
     }
 }
@@ -61,11 +61,11 @@ function LoopingThroughRows{
     ForEach ($line in $CSV){
 
         $script:MailToForward = $($line.Mail)
-        $script:DateON = $($line.Date1)
-        $script:DateOFF = $($line.Date2)
-        $script:MailF1 = $($line.MailF1)
-        $script:MailF2 = $($line.MailF2)
-        $script:MailF3 = $($line.MailF3)
+        $script:DateON = $($line.Date1).trim()
+        $script:DateOFF = $($line.Date2).trim()
+        $script:MailF1 = $($line.MailF1).trim()
+        $script:MailF2 = $($line.MailF2).trim()
+        $script:MailF3 = $($line.MailF3).trim()
 
         if($DateON -or $DateOFF -eq $CurrentDate ){
             &CreatingDistroGroupName
